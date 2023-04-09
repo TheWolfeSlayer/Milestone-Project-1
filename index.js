@@ -55,6 +55,7 @@ const projectiles = []
 
 function animate(){
     requestAnimationFrame(animate)
+    ctx.clearRect(0, 0, gameArea.width, gameArea.height)
     projectiles.forEach((projectile) => {
         projectile.update()
     })
@@ -67,7 +68,6 @@ window.addEventListener('click', (event) => {
         y: Math.sin(angle)
     }
     projectiles.push(new Projectile(x, y, 5, 'blue', velocity))
-    console.log(projectiles)
 })
 
 animate()
