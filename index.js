@@ -34,12 +34,13 @@ class Projectile {
     }
     draw() {
         ctx.beginPath()
-        ctx.arc(player.x, player.y, this.radius, 0, Math.PI * 2, false)
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
         ctx.fillStyle = this.color
         ctx.fill()
     }
 
     update() {
+        this.draw()
         this.x = this.x + this.velocity.x
         this.y = this.y + this.velocity.y
     }
@@ -50,23 +51,23 @@ const y = gameArea.height / 2
 const player = new Player(x, y, 50, 'red')
 player.draw()
 
-const projectile = new Projectile(
-    x, 
-    y, 
-    10, 
-    'blue',
-    {
-        x: 1,
-        y: 1
-    }
-)
+const projectiles = []
 
 function animate(){
     requestAnimationFrame(animate)
-    projectile.draw()
-    projectile.update()
+    projectiles.forEach((projectile) => {
+        projectile.update()
+    })
 }
 
 window.addEventListener('click', (event) => {
-    animate()
+    const angle = Math.atan2(event.clientY - y, event.clientX - x)
+    const velocity = {
+        x: Math.cos(angle),
+        y: Math.sin(angle)
+    }
+    projectiles.push(new Projectile(x, y, 5, 'blue', velocity))
+    console.log(projectiles)
 })
+
+animate()
