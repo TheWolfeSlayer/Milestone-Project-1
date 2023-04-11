@@ -18,10 +18,12 @@ class Player {
     draw() {
         if (clickX < x) {
             image.src = 'assets/AdventurerFlipped.png'
+            ctx.drawImage(image, x-30, y-25, 75, 55.5)
         } else if (clickX > x) {
             image.src = 'assets/Adventurer.png'
+            ctx.drawImage(image, x-45, y-25, 75, 55.5)
         }
-        ctx.drawImage(image, x-45, y-25, 75, 55.5)
+        // ctx.drawImage(image, x-45, y-25, 75, 55.5)
         
         // ctx.beginPath()
         // ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
