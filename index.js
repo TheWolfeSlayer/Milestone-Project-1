@@ -2,10 +2,9 @@ const gameArea = document.querySelector('canvas');
 
 const ctx = gameArea.getContext('2d')
 
+var image = document.createElement('img')
 gameArea.width = innerWidth
 gameArea.height = innerHeight
-
-
 
 class Player {
     constructor(x, y, radius, color) {
@@ -16,10 +15,12 @@ class Player {
     }
 
     draw() {
-        ctx.beginPath()
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
-        ctx.fillStyle = this.color
-        ctx.fill()
+        image.src = 'assets/Adventurer.png'
+        ctx.drawImage(image, x-45, y-25, 75, 55.5)
+        // ctx.beginPath()
+        // ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
+        // ctx.fillStyle = this.color
+        // ctx.fill()
     }
 }
 
@@ -104,8 +105,8 @@ function animate(){
 window.addEventListener('click', (event) => {
     const angle = Math.atan2(event.clientY - y, event.clientX - x)
     const velocity = {
-        x: Math.cos(angle),
-        y: Math.sin(angle)
+        x: Math.cos(angle)*5,
+        y: Math.sin(angle)*5
     }
     projectiles.push(new Projectile(x, y, 7.5, 'blue', velocity))
 })
