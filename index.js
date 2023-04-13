@@ -109,21 +109,22 @@ function spawnEnemies() {
             y = Math.random() < 0.5 ? 0 - radius : gameArea.height + radius
         }
         
-        const color = 'green'
+        const color = `hsl(${Math.random() * 360}, 50%, 50%)`
         const angle = Math.atan2(midY - y, midX - x )
         const velocity = {
-            x: Math.cos(angle),
-            y: Math.sin(angle)
+            x: Math.cos(angle) * 3,
+            y: Math.sin(angle) * 3
         }
         enemies.push(new enemy(x, y, radius, color, velocity))
-    }, 1000)
+    }, Math.random() * (1000 - 250) + 250 )
 }
 
 let animationID
 //animates everything on the canvas
 function animate(){
     animationID = requestAnimationFrame(animate)
-    ctx.clearRect(0, 0, gameArea.width, gameArea.height)
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)'
+    ctx.fillRect(0, 0, gameArea.width, gameArea.height)
     player.draw()
     projectiles.forEach((projectile, ii) => {
         projectile.update()
@@ -162,7 +163,7 @@ window.addEventListener('click', (event) => {
         x: Math.cos(angle)*5,
         y: Math.sin(angle)*5
     }
-    projectiles.push(new Projectile(midX, midY, 7.5, 'blue', velocity))
+    projectiles.push(new Projectile(midX, midY, 7.5, 'white', velocity))
     
 })
 
