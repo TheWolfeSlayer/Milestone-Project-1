@@ -97,9 +97,18 @@ let clickX = 0
 //function to spawn enemies on the screen
 function spawnEnemies() {
     setInterval(() => {
-        const x = Math.random() * gameArea.width
-        const y = Math.random() * gameArea.height
-        const radius = 30
+        const radius = Math.random() * (45 - 10) + 10
+        let x
+        let y
+        //randomizes the spawn location
+        if(Math.random() < 0.5 ) { 
+            x = Math.random() < 0.5 ? 0 - radius : gameArea.width + radius
+            y = Math.random() * gameArea.height 
+        } else {
+            x = Math.random() * gameArea.width
+            y = Math.random() < 0.5 ? 0 - radius : gameArea.height + radius
+        }
+        
         const color = 'green'
         const angle = Math.atan2(midY - y, midX - x )
         const velocity = {
@@ -110,16 +119,38 @@ function spawnEnemies() {
     }, 1000)
 }
 
+let animationID
 //animates everything on the canvas
 function animate(){
-    requestAnimationFrame(animate)
+    animationID = requestAnimationFrame(animate)
     ctx.clearRect(0, 0, gameArea.width, gameArea.height)
     player.draw()
-    projectiles.forEach((projectile) => {
+    projectiles.forEach((projectile, ii) => {
         projectile.update()
+        //removes projectiles that are off the screen
+        if (projectile.x + projectile.radius < 0 ||
+            projectile.x - projectile.radius > gameArea.width ||
+            projectile.y + projectile.radius < 0 ||
+            projectile.y - projectile.radius > gameArea.width ) { 
+                
+                projectiles.splice(ii, 1)
+        }
     })
-    enemies.forEach(enemy => {
+    enemies.forEach((enemy, ii) => {
         enemy.update()
+
+        const dist = Math.hypot(player.x - enemy.x, player.y - enemy.y)
+        if (dist - enemy.radius - 25 < 1) {
+            cancelAnimationFrame(animationID)
+        }
+
+        projectiles.forEach((projectile, projectileii) => {
+            const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
+            if (dist - enemy.radius - projectile.radius < 1) {
+                enemies.splice(ii, 1)
+                projectiles.splice(projectileii, 1)
+            }
+        })
     })
 }
 
