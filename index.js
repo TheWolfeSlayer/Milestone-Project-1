@@ -20,12 +20,12 @@ class Player {
 
     draw() {
         //draws sprite, flips depending on which side of the screen is clicked
-        if (clickX < x) {
+        if (clickX < midX) {
             image.src = 'assets/AdventurerFlipped.png'
-            ctx.drawImage(image, x-30, y-25, 75, 55.5)
-        } else if (clickX > x) {
+            ctx.drawImage(image, midX-30, midY-25, 75, 55.5)
+        } else if (clickX > midX) {
             image.src = 'assets/Adventurer.png'
-            ctx.drawImage(image, x-45, y-25, 75, 55.5)
+            ctx.drawImage(image, midX-45, midY-25, 75, 55.5)
         }
         // ctx.drawImage(image, x-45, y-25, 75, 55.5)
         
@@ -84,10 +84,10 @@ class enemy {
 }
 
 //takes the midpoint of the screen and assigns it to variables
-const x = gameArea.width / 2
-const y = gameArea.height / 2
+const midX = gameArea.width / 2
+const midY = gameArea.height / 2
 //makes player on screen
-const player = new Player(x, y, 45, 'red')
+const player = new Player(midX, midY, 45, 'red')
 //makes array to hold multiple projectiles and enemies
 const projectiles = []
 const enemies = []
@@ -97,15 +97,16 @@ let clickX = 0
 //function to spawn enemies on the screen
 function spawnEnemies() {
     setInterval(() => {
-        const x = 100
-        const y = 100
-        const radius = 45
+        const x = Math.random() * gameArea.width
+        const y = Math.random() * gameArea.height
+        const radius = 30
         const color = 'green'
+        const angle = Math.atan2(midY - y, midX - x )
         const velocity = {
-            x: 1,
-            y: 1
+            x: Math.cos(angle),
+            y: Math.sin(angle)
         }
-        enemies.push(new Enemy(x, y, radius, color, velocity))
+        enemies.push(new enemy(x, y, radius, color, velocity))
     }, 1000)
 }
 
@@ -113,7 +114,6 @@ function spawnEnemies() {
 function animate(){
     requestAnimationFrame(animate)
     ctx.clearRect(0, 0, gameArea.width, gameArea.height)
-    
     player.draw()
     projectiles.forEach((projectile) => {
         projectile.update()
@@ -126,13 +126,14 @@ function animate(){
 window.addEventListener('click', (event) => {
     clickX = event.clientX
     
-    const angle = Math.atan2(event.clientY - y, event.clientX - x)
+    const angle = Math.atan2(event.clientY - midY, event.clientX - midX)
     const velocity = {
         x: Math.cos(angle)*5,
         y: Math.sin(angle)*5
     }
-    projectiles.push(new Projectile(x, y, 7.5, 'blue', velocity))
+    projectiles.push(new Projectile(midX, midY, 7.5, 'blue', velocity))
     
 })
 
 animate()
+spawnEnemies()
