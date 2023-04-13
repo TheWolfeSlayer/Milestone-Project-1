@@ -1,6 +1,6 @@
 const gameArea = document.querySelector('canvas');
-
 const ctx = gameArea.getContext('2d')
+const score = document.getElementById('scoreNumber')
 
 //builds image variable to hold sprite
 var image = document.createElement('img')
@@ -120,6 +120,7 @@ function spawnEnemies() {
 }
 
 let animationID
+let scoreAm = 0
 //animates everything on the canvas
 function animate(){
     animationID = requestAnimationFrame(animate)
@@ -148,6 +149,8 @@ function animate(){
         projectiles.forEach((projectile, projectileii) => {
             const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
             if (dist - enemy.radius - projectile.radius < 1) {
+                scoreAm += 100
+                score.textContent = scoreAm
                 enemies.splice(ii, 1)
                 projectiles.splice(projectileii, 1)
             }
